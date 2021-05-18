@@ -6,31 +6,43 @@
 таймер с настройками.
 Для подсчета значений используй следующие готовые формулы, 
 где time - разница между targetDate и текущей датой. */
-new CountdownTimer({
-    selector: '#timer-1',
-    targetDate: new Date('Jul 17, 2019'),
-  });
-  /*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
+
+const daysRef = document.querySelector('.value[data-value="days"]');
+const hoursRef = document.querySelector('.value[data-value="hours"]');
+const minsRef = document.querySelector('.value[data-value="mins"]');
+const secsRef = document.querySelector('.value[data-value="secs"]');
+
+
+class CountdownTimer {
+  constructor({targetDate} = {}) {
+    this.targetDate = targetDate
+    this.setInterval = setInterval(() => {
+      const currentDate = Date.now()
+      const deltaTime = this.targetDate - currentDate
+      const time = this.getTimeComponents(deltaTime);
+      this.updateClockface (time) 
+
+    }, 1000);
+  }
+
+getTimeComponents(time) {
 const days = Math.floor(time / (1000 * 60 * 60 * 24));
-
-/*
- * Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
- */
 const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-/*
- * Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
- */
 const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
- * миллисекунд в одной секунде (1000)
- */
 const secs = Math.floor((time % (1000 * 60)) / 1000);
+  return {days, hours, mins, secs}
+}
+
+
+updateClockface({ days, hours, mins, secs }) {
+  daysRef.textContent = `${days}`
+  hoursRef.textContent = `${hours}`
+  minsRef.textContent = `${mins}`
+  secsRef.textContent = `${secs}`
+}
+
+}
+new CountdownTimer({
+  selector: '#timer-1',
+  targetDate: new Date('May 31, 2021 9:59:59'),
+}); 
