@@ -14,7 +14,8 @@ const secsRef = document.querySelector('.value[data-value="secs"]');
 
 
 class CountdownTimer {
-  constructor({targetDate} = {}) {
+  constructor({ selector, targetDate }) {
+    this.selector = selector
     this.targetDate = targetDate
     this.setInterval = setInterval(() => {
       const currentDate = Date.now()
